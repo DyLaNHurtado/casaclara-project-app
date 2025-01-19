@@ -8,6 +8,8 @@ const router = express.Router();
 router.get('/', AnunciosController.getAll);
 router.get('/:id', AnunciosController.getById);
 router.post('/', validateAnuncio, AnunciosController.create);
+router.post('/createMany', validateAnuncio, AnunciosController.createMany);
+
 router.put('/:id', validateAnuncio, AnunciosController.update);
 router.delete('/:id', AnunciosController.delete);
 

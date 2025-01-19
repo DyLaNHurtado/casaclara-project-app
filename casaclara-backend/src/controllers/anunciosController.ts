@@ -36,6 +36,16 @@ export const AnunciosController = {
     }
   },
 
+  async createMany(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const anuncios: Omit<Anuncio, 'id' | 'fecha'>[] = req.body;
+      const newAnuncios = await AnuncioModel.createMany(anuncios);
+      res.status(201).json(newAnuncios);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = parseInt(req.params.id);
