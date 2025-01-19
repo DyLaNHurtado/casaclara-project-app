@@ -20,6 +20,25 @@ export const AnuncioModel = {
     return data;
   },
 
+  async createMany(anuncios: Omit<Anuncio, 'id' | 'fecha'>[]): Promise<Anuncio[]> {
+    const formattedAnuncios = anuncios.map(anuncio => ({
+      ...anuncio,
+      coordenadas: `POINT(${anuncio.coordenadas.lng} ${anuncio.coordenadas.lat})`,
+      fotos: JSON.stringify(anuncio.fotos)
+    }));
+
+    const { data, error } = await supabase
+      .from('anuncios')
+      .insert(formattedAnuncios);
+
+    if (error) {
+      logger.error('Error creating multiple anuncios:', error);
+      throw error;
+    }
+
+    return data ? (data as Anuncio[]).map(this.parseAnuncio) : [];
+  },
+
   async getAll(): Promise<Anuncio[]> {
     const { data, error } = await supabase
       .from('anuncios')
