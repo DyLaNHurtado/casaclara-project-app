@@ -18,7 +18,7 @@
       <div>
         <p class="text-2xl font-bold text-primary mb-4">{{ formatPrice(ad.precio) }} €</p>
         <p class="text-gray-600 mb-4 flex items-center">
-          <!-- <IconMapPin class="w-5 h-5 mr-2" /> -->
+          <IconMapPin class="w-5 h-5 mr-2" />
           {{ ad.ubicacion }}
         </p>
         <p class="text-gray-800 mb-6">{{ ad.descripcion }}</p>
@@ -52,7 +52,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAdStore } from '@/stores/adStore';
 import type { Anuncio } from '@/types/anuncio';
-/* import { IconMapPin } from '@/components/common/icons'; */
+import { IconMapPin } from '@/components/common/icons';
 import { formatPrice } from '@/utils/formatters';
 
 const route = useRoute();

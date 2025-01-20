@@ -7,12 +7,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#0078D4',
-        secondary: '#2B88D8',
-        accent: '#00B294',
-        background: '#F3F2F1',
-        surface: '#FFFFFF',
-        text: '#323130',
+        primary: '#DBBB31',
+        secondary: '#919ADB',
       },
       fontFamily: {
         sans: ['Segoe UI', 'sans-serif'],

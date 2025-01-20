@@ -1,4 +1,3 @@
-
 import type { Anuncio } from '@/types/anuncio';
 import axios from 'axios';
 

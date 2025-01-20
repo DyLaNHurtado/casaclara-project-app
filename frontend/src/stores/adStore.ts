@@ -5,6 +5,7 @@ import * as api from '@/services/api';
 
 export const useAdStore = defineStore('adStore', () => {
   const ads = ref<Anuncio[]>([]);
+  const favoriteAds = ref<Anuncio[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
@@ -26,6 +27,29 @@ export const useAdStore = defineStore('adStore', () => {
     }
   };
 
+  const loadFavoriteAds = () => {
+    const storedFavorites = localStorage.getItem('favoriteAds');
+    if (storedFavorites) {
+      favoriteAds.value = JSON.parse(storedFavorites);
+    }
+  };
+
+  const saveFavoriteAds = () => {
+    localStorage.setItem('favoriteAds', JSON.stringify(favoriteAds.value));
+  };
+
+  const addFavoriteAd = (ad: Anuncio) => {
+    if (!favoriteAds.value.some(favAd => favAd.id === ad.id)) {
+      favoriteAds.value.push(ad);
+      saveFavoriteAds();
+    }
+  };
+
+  const removeFavoriteAd = (adId: number) => {
+    favoriteAds.value = favoriteAds.value.filter(ad => ad.id !== adId);
+    saveFavoriteAds();
+  };
+
   const fetchAdDetails = async (id: number) => {
     isLoading.value = true;
     error.value = null;
@@ -41,10 +65,14 @@ export const useAdStore = defineStore('adStore', () => {
 
   return {
     ads,
+    favoriteAds,
     filteredAds,
     isLoading,
     error,
     fetchAds,
+    loadFavoriteAds,
+    addFavoriteAd,
+    removeFavoriteAd,
     fetchAdDetails,
   };
 });

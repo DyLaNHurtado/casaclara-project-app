@@ -30,6 +30,7 @@ import { onMounted, computed } from 'vue';
 import { useAdStore } from '@/stores/adStore';
 import Filters from '@/components/ads/Filters.vue';
 import AdCard from '@/components/ads/AdCard.vue';
+
 const adStore = useAdStore();
 
 const isLoading = computed(() => adStore.isLoading);
