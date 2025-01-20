@@ -182,6 +182,6 @@ dist/
 npm-debug.log
 yarn-error.log
 
-casaclara-backend/package-lock.json
-casaclara-frontend/package-lock.json
+backend/package-lock.json
+frontend/package-lock.json
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,vuejs,git
