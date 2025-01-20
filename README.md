@@ -22,7 +22,7 @@ El proyecto esta en fase inicial, estoy solo desarrollandolo por pasion en mis r
 ### Backend  
 - **Node.js** + **Express**  
 - **Puppeteer** / **Cheerio** (para scraping).  
-- **PostgreSQL** + **PostGIS** (para almacenamiento y búsquedas geoespaciales).  Alamacenada en **Supabase**
+- **PostgreSQL** + **PostGIS** (para almacenamiento y búsquedas geoespaciales).  Almacenada en **Supabase**
 
 ### Despliegue  
 - **Vercel**   
@@ -42,20 +42,16 @@ El proyecto esta en fase inicial, estoy solo desarrollandolo por pasion en mis r
     Instala las dependencias:
 
 # Instalar frontend  
-cd casaclara-frontend  
+cd frontend  
 npm install  
 
 # Instalar backend  
-cd ../casaclara-backend  
+cd ../backend  
 npm install  
 
 Configura las variables de entorno:
 
-    .env (Backend):
-
-    DATABASE_URL=postgresql://user:password@localhost:5432/casaclara  
-    API_KEY_GOOGLE_MAPS=tu_api_key  
-
+    .env (Backend): No son publicas, no todo el mundo tiene acceso a ellas.
 Ejecuta la aplicación:
 
     # Inicia el backend  
