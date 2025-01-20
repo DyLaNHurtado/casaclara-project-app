@@ -1,52 +1,46 @@
 <template>
-    <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-      <!-- Sidebar de Filtros -->
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Anuncios Destacados</h1>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
       <Filters @filter="applyFilters" />
-  
-      <!-- Lista de Anuncios -->
-      <div class="col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <AdCard
-          v-for="ad in filteredAds"
-          :key="ad.id"
-          :ad="ad"
-        />
+      <div class="md:col-span-3">
+        <div v-if="isLoading" class="text-center py-8">
+          <p class="text-xl">Cargando anuncios...</p>
+        </div>
+        <div v-else-if="error" class="text-center py-8">
+          <p class="text-xl text-red-600">{{ error }}</p>
+        </div>
+        <div v-else-if="filteredAds.length === 0" class="text-center py-8">
+          <p class="text-xl">No se encontraron anuncios que coincidan con los filtros aplicados.</p>
+        </div>
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <AdCard
+            v-for="ad in filteredAds"
+            :key="ad.id"
+            :ad="ad"
+          />
+        </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  import Filters from "../components/Filters.vue";
-  import AdCard from "../components/AdCard.vue";
-  
-  export default {
-    name: "HomeView",
-    components: { Filters, AdCard },
-    data() {
-      return {
-        ads: [
-          // Datos simulados
-          { id: 1, title: "Apartamento céntrico", category: "Inmuebles", price: 120000, location: "Madrid", image: "https://via.placeholder.com/300" },
-          { id: 2, title: "Coche compacto", category: "Vehículos", price: 8000, location: "Barcelona", image: "https://via.placeholder.com/300" },
-          { id: 3, title: "Televisor 4K", category: "Electrónica", price: 600, location: "Valencia", image: "https://via.placeholder.com/300" },
-        ],
-        filteredAds: [],
-      };
-    },
-    methods: {
-      applyFilters(filters) {
-        this.filteredAds = this.ads.filter(ad => {
-          return (
-            (filters.category === "" || ad.category === filters.category) &&
-            ad.price <= filters.price &&
-            (filters.location === "" || ad.location.toLowerCase().includes(filters.location.toLowerCase()))
-          );
-        });
-      },
-    },
-    mounted() {
-      // Inicializa los anuncios filtrados
-      this.filteredAds = this.ads;
-    },
-  };
-  </script>
-  
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted, computed } from 'vue';
+import { useAdStore } from '@/stores/adStore';
+import Filters from '@/components/ads/Filters.vue';
+import AdCard from '@/components/ads/AdCard.vue';
+const adStore = useAdStore();
+
+const isLoading = computed(() => adStore.isLoading);
+const error = computed(() => adStore.error);
+const filteredAds = computed(() => adStore.filteredAds);
+
+onMounted(() => {
+  adStore.fetchAds();
+});
+
+const applyFilters = (filters: any) => {
+  adStore.fetchAds(filters);
+};
+</script>
