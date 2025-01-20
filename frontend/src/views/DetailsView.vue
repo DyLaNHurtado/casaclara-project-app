@@ -1,41 +1,39 @@
 <template>
   <div v-if="ad" class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">{{ ad.nombre }}</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div>
-        <img :src="ad.fotos[0] || '/placeholder-image.jpg'" :alt="ad.nombre" class="w-full h-96 object-cover rounded-lg shadow-md">
-        <div v-if="ad.fotos.length > 1" class="mt-4 grid grid-cols-4 gap-2">
-          <img
-            v-for="(foto, index) in ad.fotos.slice(1, 5)"
-            :key="index"
-            :src="foto"
-            :alt="`${ad.nombre} - imagen ${index + 2}`"
-            class="w-full h-24 object-cover rounded-md cursor-pointer"
-            @click="setMainImage(foto)"
-          >
-        </div>
-      </div>
-      <div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <img :src="ad.fotos[0] || '/placeholder-image.jpg'" :alt="ad.nombre" class="w-full h-64 object-cover">
+      <div class="p-6">
+        <h1 class="text-2xl font-bold mb-4 text-gray-800">{{ ad.nombre }}</h1>
         <p class="text-2xl font-bold text-primary mb-4">{{ formatPrice(ad.precio) }} €</p>
-        <p class="text-gray-600 mb-4 flex items-center">
-          <IconMapPin class="w-5 h-5 mr-2" />
-          {{ ad.ubicacion }}
-        </p>
-        <p class="text-gray-800 mb-6">{{ ad.descripcion }}</p>
-        <div class="bg-gray-100 p-4 rounded-lg mb-6">
-          <h2 class="text-lg font-semibold mb-2 text-gray-800">Detalles</h2>
-          <ul class="space-y-2">
-            <li><strong>Categoría:</strong> {{ ad.categoria }}</li>
-            <li><strong>Tipo:</strong> {{ ad.tipo }}</li>
-            <!-- Añadir más detalles según sea necesario -->
-          </ul>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="bg-gray-200 text-gray-800 px-2 py-1 rounded-md text-sm">{{ ad.categoria }}</span>
+          <span class="bg-gray-200 text-gray-800 px-2 py-1 rounded-md text-sm flex items-center">
+            <IconMapPin class="w-4 h-4 mr-1" />
+            {{ ad.ubicacion }}
+          </span>
         </div>
-        <button
-          @click="contactSeller"
-          class="w-full bg-primary text-white py-3 px-6 rounded-md hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-        >
-          Contactar con el vendedor
-        </button>
+        <p class="text-gray-600 mb-6">{{ ad.descripcion }}</p>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div v-for="(foto, index) in ad.fotos.slice(1, 5)" :key="index">
+            <img :src="foto" :alt="`${ad.nombre} - imagen ${index + 2}`" class="w-full h-32 object-cover rounded-md">
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <button
+            @click="toggleFavorite"
+            :class="{'text-primary': isFavorite, 'text-gray-400': !isFavorite}"
+            class="flex items-center space-x-2 hover:text-primary focus:outline-none transition-colors duration-200"
+          >
+            <IconHeart :class="{ 'fill-current': isFavorite }" class="w-6 h-6" />
+            <span>{{ isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos' }}</span>
+          </button>
+          <button
+            @click="contactSeller"
+            class="bg-secondary text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
+          >
+            Contactar con el vendedor
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -48,11 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAdStore } from '@/stores/adStore';
 import type { Anuncio } from '@/types/anuncio';
-import { IconMapPin } from '@/components/common/icons';
+import { IconMapPin, IconHeart } from '@/components/common/icons';
 import { formatPrice } from '@/utils/formatters';
 
 const route = useRoute();
@@ -72,9 +70,15 @@ onMounted(async () => {
   }
 });
 
-const setMainImage = (imageUrl: string) => {
+const isFavorite = computed(() => adStore.favoriteAds.some(favAd => favAd.id === ad.value?.id));
+
+const toggleFavorite = () => {
   if (ad.value) {
-    ad.value.fotos = [imageUrl, ...ad.value.fotos.filter(foto => foto !== imageUrl)];
+    if (isFavorite.value) {
+      adStore.removeFavoriteAd(ad.value.id!);
+    } else {
+      adStore.addFavoriteAd(ad.value);
+    }
   }
 };
 

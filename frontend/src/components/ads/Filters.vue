@@ -1,8 +1,7 @@
 <template>
-  <aside class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold mb-6 text-gray-800">Filtros</h2>
-    <form @submit.prevent="applyFilters">
-      <div class="space-y-4">
+  <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <form @submit.prevent="applyFilters" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Categoría:</label>
           <select
@@ -16,7 +15,6 @@
             </option>
           </select>
         </div>
-
         <div>
           <label for="price-range" class="block text-sm font-medium text-gray-700 mb-1">
             Precio máximo: {{ formatPrice(filters.maxPrice) }} €
@@ -27,11 +25,10 @@
             v-model="filters.maxPrice"
             :min="0"
             :max="1000000"
-            step="1000"
+            step="10000"
             class="w-full"
           />
         </div>
-
         <div>
           <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Ubicación:</label>
           <input
@@ -42,23 +39,22 @@
             class="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
           />
         </div>
-
-        <button
-          type="submit"
-          class="w-full bg-primary text-white p-2 rounded-md hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-        >
-          Aplicar Filtros
-        </button>
       </div>
+      <button
+        type="submit"
+        class="w-full bg-primary text-white p-2 rounded-md hover:bg-opacity-90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+      >
+        Buscar
+      </button>
     </form>
-  </aside>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { formatPrice } from '@/utils/formatters';
 
-const categories = ['Inmuebles', 'Vehículos', 'Electrónica'];
+const categories = ['Pisos', 'Casas', 'Locales', 'Garajes', 'Oficinas'];
 
 interface Filters {
   category: string;
