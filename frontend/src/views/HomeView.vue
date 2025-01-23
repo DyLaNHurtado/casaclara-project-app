@@ -1,91 +1,128 @@
 <template>
   <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8 text-gray-800">Anuncios Destacados</h1>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <Filters @filter="applyFilters" />
-      <div class="md:col-span-3">
-        <div v-if="isLoading" class="text-center py-8">
-          <Spinner />
-        </div>
-        <div v-else-if="error" class="text-center py-8">
-          <p class="text-xl text-red-600">{{ error }}</p>
-        </div>
-        <div v-else-if="filteredAds.length === 0" class="text-center py-8">
-          <p class="text-xl">No se encontraron anuncios que coincidan con los filtros aplicados.</p>
-        </div>
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <transition-group name="fade" tag="div">
-            <AdCard
-              v-for="ad in filteredAds"
-              :key="ad.id"
-              :ad="ad"
-            />
-          </transition-group>
-        </div>
-        <div ref="loadMoreTrigger" class="h-10 mt-8"></div>
-      </div>
+    <h1 class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-teal-400 text-transparent bg-clip-text">
+      Tu espacio perfecto está aquí
+    </h1>
+
+    <Search
+      :suggestions="suggestions"
+      :filters="filters"
+      @update:search="updateSearch"
+      @update:categories="updateCategories"
+      @update:price-range="updatePriceRange"
+    />
+
+    <div class="flex justify-center mb-8 space-x-4">
+      <Button @click="openMap" variant="default" class="flex items-center">
+        <IconMap class="w-4 h-4 mr-2" />
+        Ver mapa
+      </Button>
+      <Button @click="exportToCSV" variant="outline" class="flex items-center">
+        <IconFileDown class="w-4 h-4 mr-2" />
+        Exportar CSV
+      </Button>
+      <Button @click="exportToPDF" variant="outline" class="flex items-center">
+        <IconFileText class="w-4 h-4 mr-2" />
+        Exportar PDF
+      </Button>
     </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <AdCard
+        v-for="ad in ads"
+        :key="ad.id"
+        :ad="ad"
+        @toggle-favorite="toggleFavorite"
+      />
+    </div>
+
+    <div ref="loader" class="h-10 mt-8"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue';
-import { useAdStore } from '@/stores/adStore';
-import Filters from '@/components/ads/Filters.vue';
-import AdCard from '@/components/ads/AdCard.vue';
-import Spinner from '@/components/common/Spinner.vue';
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useAdStore } from '@/stores/adStore'
+import Search from '@/components/Search.vue'
+import AdCard from '@/components/AdCard.vue'
+import Button from '@/components/ui/Button.vue'
+import { IconMap, IconFileDown, IconFileText } from '@/components/common/icons'
+import type { Anuncio } from '@/types/anuncio'
 
-const adStore = useAdStore();
-const isLoading = computed(() => adStore.isLoading);
-const error = computed(() => adStore.error);
-const filteredAds = computed(() => adStore.filteredAds);
-const loadMoreTrigger = ref<HTMLElement | null>(null);
+const adStore = useAdStore()
+const ads = ref<Anuncio[]>([])
+const page = ref(1)
+const loader = ref<HTMLElement | null>(null)
+const suggestions = ref<string[]>([])
 
-const fetchAds = async (filters = {}) => {
-  if (isLoading.value) return;
-  adStore.isLoading = true;
-  adStore.error = null;
-  try {
-    await adStore.fetchAds(filters);
-  } catch (err) {
-    adStore.error = 'Error al cargar los anuncios';
-    console.error(err);
-  } finally {
-    adStore.isLoading = false;
-  }
-};
+const filters = ref({
+  search: '',
+  categories: ['Piso', 'Casa', 'Local', 'Garaje'],
+  minPrice: 0,
+  maxPrice: 1000000,
+})
 
-const applyFilters = (filters: any) => {
-  fetchAds(filters);
-};
+const updateSearch = (value: string) => {
+  filters.value.search = value
+  // Implement search logic here
+}
 
-const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-  if (entries[0].isIntersecting) {
-    fetchAds();
-  }
-};
+const updateCategories = (categories: string[]) => {
+  filters.value.categories = categories
+  // Implement category filter logic here
+}
+
+const updatePriceRange = ([min, max]: [number, number]) => {
+  filters.value.minPrice = min
+  filters.value.maxPrice = max
+  // Implement price range filter logic here
+}
+
+const openMap = () => {
+  console.log('Opening interactive map...')
+  // Implement map opening logic here
+}
+
+const exportToCSV = () => {
+  console.log('Exporting to CSV...')
+  // Implement CSV export logic here
+}
+
+const exportToPDF = () => {
+  console.log('Exporting to PDF...')
+  // Implement PDF export logic here
+}
+
+const toggleFavorite = (id: number) => {
+  console.log(`Toggling favorite for ad ${id}`)
+  // Implement favorite toggling logic here
+}
+
+const fetchAds = async () => {
+  const newAds = (await adStore.fetchAds({ ...filters.value, page: page.value }) as unknown) as Anuncio[] || []
+  ads.value = page.value === 1 ? newAds : [...ads.value, ...newAds]
+  page.value++
+}
 
 onMounted(() => {
-  fetchAds();
-  const observer = new IntersectionObserver(handleIntersect);
-  if (loadMoreTrigger.value) {
-    observer.observe(loadMoreTrigger.value);
-  }
-});
+  fetchAds()
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        fetchAds()
+      }
+    },
+    { threshold: 1.0 }
+  )
 
-onUnmounted(() => {
-  if (loadMoreTrigger.value) {
-    const observer = new IntersectionObserver(handleIntersect);
-    observer.unobserve(loadMoreTrigger.value);
+  if (loader.value) {
+    observer.observe(loader.value)
   }
-});
+
+  onUnmounted(() => {
+    if (loader.value) {
+      observer.unobserve(loader.value)
+    }
+  })
+})
 </script>
-
-<style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to  {
-  opacity: 0;
-}
-</style>

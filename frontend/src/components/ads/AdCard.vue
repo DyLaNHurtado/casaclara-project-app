@@ -1,51 +1,61 @@
 <template>
-  <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
-    <img :src="ad.fotos[0] || '/placeholder-image.jpg'" :alt="ad.nombre" class="w-full h-48 object-cover">
+  <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <img :src="props.ad.fotos[0] || '/placeholder.svg'" :alt="props.ad.nombre" class="w-full h-48 object-cover">
     <div class="p-4">
-      <h2 class="text-lg font-semibold mb-2 text-gray-800">{{ ad.nombre }}</h2>
-      <p class="text-sm text-gray-600 mb-2">{{ ad.categoria }}</p>
-      <p class="text-xl font-bold text-primary mb-2">{{ formatPrice(ad.precio) }} €</p>
-      <p class="text-sm text-gray-600 flex items-center mb-4">
-        <IconMapPin class="w-4 h-4 mr-1" />
-        {{ ad.ubicacion }}
-      </p>
-      <div class="flex justify-between items-center">
-        <button
-          @click="toggleFavorite"
-          :class="{'text-primary': isFavorite, 'text-gray-400': !isFavorite}"
-          class="hover:text-primary focus:outline-none transition-colors duration-200"
+      <div class="flex justify-between items-start mb-2">
+        <h2 class="text-lg font-semibold text-gray-800">{{ props.ad.nombre }}</h2>
+        <Button
+          variant="ghost"
+          size="icon"
+          @click="$emit('toggle-favorite', props.ad.id)"
+          class="text-red-500 hover:text-red-700"
         >
-          <IconHeart :class="{ 'fill-current': isFavorite }" class="w-6 h-6" />
-        </button>
-        <RouterLink
-          :to="{ name: 'details', params: { id: ad.id } }"
-          class="bg-secondary text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors duration-200"
-        >
-          Ver detalles
-        </RouterLink>
+          <IconHeart class="w-5 h-5" />
+        </Button>
+      </div>
+      <Badge :class="categoryColors[props.ad.categoria]" class="mb-2">
+        {{ props.ad.categoria }}
+      </Badge>
+      <div class="grid grid-cols-2 gap-2 mb-2">
+        <div class="flex items-center">
+          <IconEuro class="w-4 h-4 mr-2 text-green-600" />
+          <span class="font-medium text-gray-700">{{ props.ad.precio.toLocaleString() }}€</span>
+        </div>
+        <div class="flex items-center">
+          <IconMap class="w-4 h-4 mr-2 text-blue-600" />
+          <span class="text-sm text-gray-600">{{ props.ad.ubicacion }}</span>
+        </div>
+        <div class="flex items-center col-span-2">
+          <IconPhone class="w-4 h-4 mr-2 text-gray-500" />
+          <span class="text-sm text-gray-600">{{ props.ad.telefono }}</span>
+        </div>
+      </div>
+      <div class="text-xs text-gray-400">
+        <!-- A {{ ad.distance }} km de tu ubicación -->
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { RouterLink } from 'vue-router';
-import type { Anuncio } from '@/types/anuncio';
-import { IconMapPin, IconHeart } from '@/components/common/icons';
-import { formatPrice } from '@/utils/formatters';
-import { useAdStore } from '@/stores/adStore';
+import Button from '@/components/ui/Button.vue'
+import Badge from '@/components/ui/Badge.vue'
+import { IconHeart, IconEuro, IconMap, IconPhone } from '@/components/common/icons'
+import type { Anuncio } from '@/types/anuncio'
 
-const props = defineProps<{ ad: Anuncio }>();
+const props = defineProps<{
+  ad: Anuncio
+}>()
 
-const adStore = useAdStore();
-const isFavorite = computed(() => adStore.favoriteAds.some(favAd => favAd.id === props.ad.id));
+const categoryColors: { [key: string]: string } = {
+  'Piso': 'bg-blue-100 text-blue-800',
+  'Casa': 'bg-green-100 text-green-800',
+  'Local': 'bg-yellow-100 text-yellow-800',
+  'Garaje': 'bg-purple-100 text-purple-800',
+}
 
-const toggleFavorite = () => {
-  if (isFavorite.value) {
-    adStore.removeFavoriteAd(props.ad.id!);
-  } else {
-    adStore.addFavoriteAd(props.ad);
-  }
-};
+defineEmits<{
+  (e: 'toggle-favorite', id: number): void
+}>()
 </script>
+
