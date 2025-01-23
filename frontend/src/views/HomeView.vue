@@ -4,13 +4,13 @@
       Tu espacio perfecto está aquí
     </h1>
 
-    <Search
-      :suggestions="suggestions"
-      :filters="filters"
-      @update:search="updateSearch"
-      @update:categories="updateCategories"
-      @update:price-range="updatePriceRange"
-    />
+    <div class="mb-8">
+      <Filters
+        :initial-filters="filters"
+        :suggestions="suggestions"
+        @update:filters="updateFilters"
+      />
+    </div>
 
     <div class="flex justify-center mb-8 space-x-4">
       <Button @click="openMap" variant="default" class="flex items-center">
@@ -43,8 +43,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useAdStore } from '@/stores/adStore'
-import Search from '@/components/Search.vue'
-import AdCard from '@/components/AdCard.vue'
+import Filters from '@/components/ads/Filters.vue'
+import AdCard from '@/components/ads/AdCard.vue'
 import Button from '@/components/ui/Button.vue'
 import { IconMap, IconFileDown, IconFileText } from '@/components/common/icons'
 import type { Anuncio } from '@/types/anuncio'
@@ -58,24 +58,12 @@ const suggestions = ref<string[]>([])
 const filters = ref({
   search: '',
   categories: ['Piso', 'Casa', 'Local', 'Garaje'],
-  minPrice: 0,
-  maxPrice: 1000000,
+  priceRange: [0, 1000000] as [number, number]
 })
 
-const updateSearch = (value: string) => {
-  filters.value.search = value
-  // Implement search logic here
-}
-
-const updateCategories = (categories: string[]) => {
-  filters.value.categories = categories
-  // Implement category filter logic here
-}
-
-const updatePriceRange = ([min, max]: [number, number]) => {
-  filters.value.minPrice = min
-  filters.value.maxPrice = max
-  // Implement price range filter logic here
+const updateFilters = (newFilters: typeof filters.value) => {
+  filters.value = newFilters
+  fetchAds()
 }
 
 const openMap = () => {

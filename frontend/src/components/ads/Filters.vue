@@ -1,78 +1,66 @@
 <template>
-  <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-    <form @submit.prevent="applyFilters" class="space-y-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Categoría:</label>
-          <select
-            id="category"
-            v-model="filters.category"
-            class="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-          >
-            <option value="">Todas</option>
-            <option v-for="category in categories" :key="category" :value="category">
-              {{ category }}
-            </option>
-          </select>
-        </div>
-        <div>
-          <label for="price-range" class="block text-sm font-medium text-gray-700 mb-1">
-            Precio máximo: {{ formatPrice(filters.maxPrice) }} €
-          </label>
-          <input
-            type="range"
-            id="price-range"
-            v-model="filters.maxPrice"
-            :min="0"
-            :max="1000000"
-            step="10000"
-            class="w-full"
-          />
-        </div>
-        <div>
-          <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Ubicación:</label>
-          <input
-            type="text"
-            id="location"
-            v-model="filters.location"
-            placeholder="Ciudad o zona"
-            class="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-          />
-        </div>
-      </div>
-      <button
-        type="submit"
-        class="w-full bg-primary text-white p-2 rounded-md hover:bg-opacity-90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-      >
-        Buscar
-      </button>
-    </form>
+  <div class="space-y-6">
+    <SearchInput
+      v-model="filters.search"
+      :suggestions="suggestions"
+      @update:modelValue="updateSearch"
+    />
+    <CategoryToggles
+      :categories="allCategories"
+      @update:categories="updateCategories"
+    />
+    <PriceRangeSlider
+      v-model="filters.priceRange"
+      :min="0"
+      :max="1000000"
+      :step="10000"
+      @update:modelValue="updatePriceRange"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { formatPrice } from '@/utils/formatters';
-
-const categories = ['Pisos', 'Casas', 'Locales', 'Garajes', 'Oficinas'];
-
-interface Filters {
-  category: string;
-  maxPrice: number;
-  location: string;
-}
-
-const filters = ref<Filters>({
-  category: '',
-  maxPrice: 1000000,
-  location: '',
-});
+import { ref, watch } from 'vue'
+import SearchInput from '@/components/ui/SearchInput.vue'
+import CategoryToggles from '@/components/ads/CategoryToggles.vue'
+import PriceRangeSlider from '@/components/ads/PriceRangeSlider.vue'
+const props = defineProps<{
+  initialFilters: {
+    search: string
+    categories: string[]
+    priceRange: [number, number]
+  }
+  suggestions: string[]
+}>()
 
 const emit = defineEmits<{
-  (e: 'filter', filters: Filters): void
-}>();
+  (e: 'update:filters', filters: typeof props.initialFilters): void
+}>()
 
-const applyFilters = () => {
-  emit('filter', { ...filters.value });
-};
+const filters = ref(props.initialFilters)
+const allCategories = ['Piso', 'Casa', 'Local', 'Garaje']
+
+const updateSearch = (value: string) => {
+  filters.value.search = value
+  emitUpdate()
+}
+
+const updateCategories = (categories: string[]) => {
+  filters.value.categories = categories
+  emitUpdate()
+}
+
+const updatePriceRange = (range: [number, number]) => {
+  filters.value.priceRange = range
+  emitUpdate()
+}
+
+const emitUpdate = () => {
+  emit('update:filters', filters.value)
+}
+
+watch(() => props.initialFilters, (newFilters) => {
+  filters.value = newFilters
+}, { deep: true })
 </script>
+
