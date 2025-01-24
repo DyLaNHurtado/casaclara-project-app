@@ -28,11 +28,11 @@ const props = withDefaults(defineProps<{
 })
 
 const variants = {
-  default: 'bg-gray-400 text-primary-foreground hover:bg-primary/90',
+  default: '',
   destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-  outline: 'border border-input hover:bg-accent hover:text-accent-foreground',
+  outline: 'border-2 border-gray-700 hover:bg-accent hover:bg-gray-700 hover:text-gray-200',
   secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-  ghost: 'hover:bg-accent hover:text-accent-foreground',
+  ghost: 'bg-gray-100 text-primary-foreground hover:bg-gray-800 hover:text-gray-200',
   link: 'underline-offset-4 hover:underline text-primary'
 }
 

@@ -7,7 +7,7 @@
       @focus="showSuggestions = true"
       @blur="handleBlur"
       placeholder="Buscar por título o ubicación"
-      class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="bg-gray-200 w-full pl-10 pr-5 py-2 shadow-sm shadow-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
     />
     <IconSearch class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
     <ul
