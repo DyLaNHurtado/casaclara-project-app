@@ -1,11 +1,11 @@
 <template>
-  <nav class="bg-neutral text-secondary border-b border-gray-200">
+  <nav class="bg-neutral text-gray-800 border-b border-gray-200">
     <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-      <span @click="goHome" class="text-2xl font-bold cursor-pointer">CasaClara</span>
+      <span @click="goHome" class="text-3xl font-bold cursor-pointer">CasaClara</span>
       <ul class="flex space-x-6">
         <li v-for="route in routes" :key="route.path">
-          <RouterLink :to="route.path" :class="getLinkClass(route.path)">
-            <span class="flex flex-row">
+          <RouterLink :to="route.path" >
+            <span class="flex flex-row text-sm justify-center items-center" :class="getLinkClass(route.path)">
               <component :is="route.icon" class="w-6 h-6 mr-2" />
               {{ route.name }}
             </span>
@@ -30,7 +30,7 @@ const routes = ref([
 const route = useRoute();
 
 const getLinkClass = (path: string) => {
-  return route.path === path ? 'text-primary hover:text-primary' : 'text-gray-400 hover:text-gray-600 transition-colors focus:scale-105';
+  return route.path === path ? 'text-gray-800 hover:text-gray-800 scale-110 font-bold' : 'text-gray-500 hover:text-gray-700  transition-all ';
 };
 
 const goHome = () => {

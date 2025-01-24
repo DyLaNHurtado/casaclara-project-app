@@ -27,7 +27,14 @@
       </Button>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div v-if="isLoading" class="text-center py-8 min-h-screen">
+      <Spinner/>
+      <p class="text-xl">Cargando anuncios...</p>
+    </div>
+    <div v-else-if="error" class="text-center py-8 min-h-screen">
+      <ErrorComponent :error="error"/>
+    </div>
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-screen">
       <AdCard
         v-for="ad in ads"
         :key="ad.id"
@@ -41,19 +48,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useAdStore } from '@/stores/adStore'
 import Filters from '@/components/ads/Filters.vue'
 import AdCard from '@/components/ads/AdCard.vue'
 import Button from '@/components/ui/Button.vue'
+import ErrorComponent from '@/components/common/ErrorComponent.vue'
 import { IconMap, IconFileDown, IconFileText } from '@/components/common/icons'
 import type { Anuncio } from '@/types/anuncio'
+import Spinner from '@/components/common/Spinner.vue'
 
 const adStore = useAdStore()
 const ads = ref<Anuncio[]>([])
 const page = ref(1)
 const loader = ref<HTMLElement | null>(null)
 const suggestions = ref<string[]>([])
+
+const isLoading = computed(() => adStore.isLoading)
+const error = computed(() => adStore.error)
 
 const filters = ref({
   search: '',
@@ -87,7 +99,8 @@ const toggleFavorite = (id: number) => {
 }
 
 const fetchAds = async () => {
-  const newAds = (await adStore.fetchAds({ ...filters.value, page: page.value }) as unknown) as Anuncio[] || []
+  await adStore.fetchAds({ ...filters.value, page: page.value })
+  const newAds = adStore.ads
   ads.value = page.value === 1 ? newAds : [...ads.value, ...newAds]
   page.value++
 }

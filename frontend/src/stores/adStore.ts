@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import type { Anuncio } from '@/types/anuncio';
-import * as api from '@/services/api';
+import { getAllAds, getAdById, postAd, postManyAds, putAd, deleteAd } from '@/services/anunciosService';
 
 export const useAdStore = defineStore('adStore', () => {
   const ads = ref<Anuncio[]>([]);
@@ -10,7 +10,6 @@ export const useAdStore = defineStore('adStore', () => {
   const error = ref<string | null>(null);
 
   const filteredAds = computed(() => {
-    // Implementar lógica de filtrado aquí
     return ads.value;
   });
 
@@ -18,15 +17,15 @@ export const useAdStore = defineStore('adStore', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      ads.value = await api.fetchAds(params);
+      ads.value = await getAllAds(params);
     } catch (err) {
-      error.value = 'Error al cargar los anuncios';
+      error.value = 'Error al cargar los anuncios. No se pudo conectar con el servidor.';
       console.error(err);
     } finally {
       isLoading.value = false;
     }
   };
-
+  
   const loadFavoriteAds = () => {
     const storedFavorites = localStorage.getItem('favoriteAds');
     if (storedFavorites) {
@@ -54,9 +53,61 @@ export const useAdStore = defineStore('adStore', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      return await api.fetchAdDetails(id);
+      return await getAdById(id);
     } catch (err) {
       error.value = 'Error al cargar los detalles del anuncio';
+      console.error(err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const createAd = async (adData: Omit<Anuncio, 'id'>) => {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      return await postAd(adData);
+    } catch (err) {
+      error.value = 'Error al crear el anuncio';
+      console.error(err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const createManyAds = async (adsList: Omit<Anuncio[], 'id'>) => {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      return await postManyAds(adsList);
+    } catch (err) {
+      error.value = 'Error al crear varios anuncios';
+      console.error(err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const updateAd = async (adId: number, adData: Anuncio) => {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      return await putAd(adId, adData);
+    } catch (err) {
+      error.value = 'Error al actualizar el anuncio';
+      console.error(err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const deleteAdById = async (adId: number) => {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      await deleteAd(adId);
+    } catch (err) {
+      error.value = 'Error al eliminar el anuncio';
       console.error(err);
     } finally {
       isLoading.value = false;
@@ -70,9 +121,14 @@ export const useAdStore = defineStore('adStore', () => {
     isLoading,
     error,
     fetchAds,
+    fetchAdDetails,
+    createAd,
+    createManyAds,
+    updateAd,
+    deleteAdById,
+    saveFavoriteAds,
     loadFavoriteAds,
     addFavoriteAd,
     removeFavoriteAd,
-    fetchAdDetails,
   };
 });
