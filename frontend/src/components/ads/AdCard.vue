@@ -33,6 +33,12 @@
       <div class="text-xs text-gray-400">
         <!-- A {{ ad.distance }} km de tu ubicación -->
       </div>
+      <router-link 
+        :to="{ name: 'adDetails', params: { id: ad.id } }" 
+        class="inline-block w-full text-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-300"
+      >
+        Ver detalles
+      </router-link>
     </div>
   </div>
 </template>

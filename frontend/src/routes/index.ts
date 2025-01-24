@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
 import HomeView from '@/views/HomeView.vue';
-import DetailsView from '@/views/DetailsView.vue';
+import AdDetailsView from '@/views/AdDetailsView.vue';
 import FavoritesView from '@/views/FavoritesView.vue';
 import NotFound from '@/views/NotFound.vue';
 
@@ -11,7 +11,7 @@ const routes = [
     component: MainLayout,
     children: [
       { path: '', name: 'home', component: HomeView },
-      { path: 'ad/:id', name: 'details', component: DetailsView, props: true },
+      { path: 'ad/:id', name: 'details', component: AdDetailsView, props: true },
       { path: 'favorites', name: 'favorites', component: FavoritesView },
       // { path: 'contact', name: 'contact', component: ContactView },
       // { path: 'about', name: 'about', component: AboutView },
