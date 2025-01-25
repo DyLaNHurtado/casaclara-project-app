@@ -1,6 +1,6 @@
 import { ScrapingController } from '../controllers/scrapingController';
 import { scrapingService } from '../services/scrapingService';
-import { AnuncioModel } from '../models/anuncio';
+import { AnuncioModel } from '../models/anuncio.model';
 import { Request, Response, NextFunction } from 'express';
 import logger from '../utils/logger';
 

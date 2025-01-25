@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { scrapingService } from '../services/scrapingService';
-import { AnuncioModel } from '../models/anuncio';
+import { AnuncioModel } from '../models/anuncio.model';
 import logger from '../utils/logger';
 
 export const ScrapingController = {

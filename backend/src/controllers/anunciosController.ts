@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AnuncioModel } from '../models/anuncio';
+import { AnuncioModel } from '../models/anuncio.model';
 import { Anuncio } from '../types/anuncio';
 
 export const AnunciosController = {

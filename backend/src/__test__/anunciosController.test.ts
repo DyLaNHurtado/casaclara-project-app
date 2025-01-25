@@ -1,5 +1,5 @@
 import { AnunciosController } from '../controllers/anunciosController';
-import { AnuncioModel } from '../models/anuncio';
+import { AnuncioModel } from '../models/anuncio.model';
 
 jest.mock('../models/anuncio');
 
