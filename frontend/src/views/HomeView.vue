@@ -34,15 +34,16 @@
     <div v-else-if="error" class="text-center py-8 min-h-screen">
       <ErrorComponent :error="error"/>
     </div>
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-screen">
+    <div class=" text-center py-8 min-h-screen">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
       <AdCard
-        v-for="ad in ads"
+        v-for="ad in mockAds"
         :key="ad.id"
         :ad="ad"
         @toggle-favorite="toggleFavorite"
       />
     </div>
-
+    </div>
     <div ref="loader" class="h-10 mt-8"></div>
   </div>
 </template>
@@ -58,8 +59,64 @@ import { IconMap, IconFileDown, IconFileText } from '@/components/common/icons'
 import type { Anuncio } from '@/types/anuncio'
 import Spinner from '@/components/common/Spinner.vue'
 
+// Mock de anuncios
+const mockAds: Anuncio[] = [
+  {
+    id: 1,
+    nombre: 'Piso en el centro',
+    telefono: "222222222",
+    tipo: 'particular',
+    categoria: '',
+    precio: 4440000,
+    ubicacion: "Barcelona",
+    coordenadas: { lat: 0, lng: 0 },
+    fotos: ['https://via.placeholder.com/300'],
+    descripcion: "string",
+    fecha: new Date(),
+  },
+  {
+    id: 2,
+    nombre: 'Habitación en el centro',
+    telefono: "222222222",
+    tipo: 'particular',
+    categoria: '',
+    precio: 4440000,
+    ubicacion: "Zaragoza",
+    coordenadas: { lat: 0, lng: 0 },
+    fotos: ['https://via.placeholder.com/300'],
+    descripcion: "string",
+    fecha: new Date(),
+  },
+  {
+    id: 3,
+    nombre: 'Local comercial',
+    telefono: "222222222",
+    tipo: 'particular',
+    categoria: '',
+    precio: 4440000,
+    ubicacion: "Madrid",
+    coordenadas: { lat: 0, lng: 0 },
+    fotos: ['https://via.placeholder.com/300'],
+    descripcion: "string",
+    fecha: new Date(),
+  },
+/*   {
+    id: 4,
+    nombre: 'Local comercial',
+    telefono: "222222222",
+    tipo: 'particular',
+    categoria: '',
+    precio: 4440000,
+    ubicacion: "Madrid",
+    coordenadas: { lat: 0, lng: 0 },
+    fotos: ['https://via.placeholder.com/300'],
+    descripcion: "string",
+    fecha: new Date(),
+  } */
+]
+
 const adStore = useAdStore()
-const ads = ref<Anuncio[]>([])
+const ads = ref<Anuncio[]>(mockAds)
 const page = ref(1)
 const loader = ref<HTMLElement | null>(null)
 const suggestions = ref<string[]>([])

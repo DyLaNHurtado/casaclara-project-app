@@ -11,7 +11,7 @@ const routes = [
     component: MainLayout,
     children: [
       { path: '', name: 'home', component: HomeView },
-      { path: 'ad/:id', name: 'details', component: AdDetailsView, props: true },
+      { path: 'ad/:id', name: 'adDetails', component: AdDetailsView, props: true },
       { path: 'favorites', name: 'favorites', component: FavoritesView },
       // { path: 'contact', name: 'contact', component: ContactView },
       // { path: 'about', name: 'about', component: AboutView },

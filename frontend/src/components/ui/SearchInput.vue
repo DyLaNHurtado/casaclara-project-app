@@ -27,8 +27,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { IconSearch } from '@/components/common/icons'
+import debounce from 'lodash.debounce'
 
 const props = defineProps<{
   modelValue: string
@@ -40,21 +41,25 @@ const emit = defineEmits<{
 }>()
 
 const showSuggestions = ref(false)
+const searchQuery = ref(props.modelValue)
 
 const filteredSuggestions = computed(() => {
+  const query = searchQuery.value.toLowerCase()
   return props.suggestions.filter(suggestion =>
-    suggestion.toLowerCase().includes(props.modelValue.toLowerCase())
-  ).slice(0, 5) // Limit to 5 suggestions
+    suggestion.toLowerCase().includes(query)
+  ).slice(0, 10) // Limit to 10 suggestions
 })
 
-const handleInput = (event: Event) => {
+const handleInput = debounce((event: Event) => {
   const value = (event.target as HTMLInputElement).value
+  searchQuery.value = value
   emit('update:modelValue', value)
   showSuggestions.value = true
-}
+}, 300)
 
 const selectSuggestion = (suggestion: string) => {
   emit('update:modelValue', suggestion)
+  searchQuery.value = suggestion
   showSuggestions.value = false
 }
 
@@ -65,8 +70,12 @@ const handleBlur = () => {
 }
 
 const highlightMatch = (suggestion: string) => {
-  const regex = new RegExp(`(${props.modelValue})`, 'gi')
+  const regex = new RegExp(`(${searchQuery.value})`, 'gi')
   return suggestion.replace(regex, '<strong class="bg-yellow-200">$1</strong>')
 }
+
+watch(() => props.modelValue, (newValue) => {
+  searchQuery.value = newValue
+})
 </script>
 

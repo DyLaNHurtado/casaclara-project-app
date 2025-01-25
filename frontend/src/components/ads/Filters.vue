@@ -38,7 +38,7 @@ const emit = defineEmits<{
 }>()
 
 const filters = ref(props.initialFilters)
-const allCategories = ['Piso', 'Casa', 'Local', 'Garaje']
+const allCategories = ['Piso', 'Casa', 'Local', 'Garaje', 'Trastero', 'Terreno']
 
 const updateSearch = (value: string) => {
   filters.value.search = value

@@ -57,11 +57,12 @@ export const IconHome = defineComponent({
         'stroke-linecap': 'round',
         'stroke-linejoin': 'round',
         'stroke-width': '2',
-        d: 'M3 12l2-2m0 0l7-7 7 7m-9 9v-6h4v6m5-6h3m-3 0l-7-7-7 7m0 0h3'
+        d: 'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z'
       })
     ]);
   }
 });
+
 export const IconBell = defineComponent({
   name: 'IconBell',
   render() {
@@ -82,7 +83,6 @@ export const IconBell = defineComponent({
     ]);
   }
 });
-
 
 export const IconFilters = defineComponent({
   name: 'IconFilters',
@@ -125,7 +125,6 @@ export const IconSearch = defineComponent({
     ]);
   }
 });
-
 
 export const IconEuro = defineComponent({
   name: "IconEuro",
@@ -347,13 +346,12 @@ export const IconError = defineComponent({
       h('path', {
         'stroke-linecap': 'round',
         'stroke-linejoin': 'round',
-        'stroke-width': '1',
+        'stroke-width': '2',
         d: 'M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-13h2v6h-2zm0 8h2v2h-2z'
       })
     ]);
   }
 });
-
 
 export const IconChevronDown = defineComponent({
   name: "IconChevronDown",

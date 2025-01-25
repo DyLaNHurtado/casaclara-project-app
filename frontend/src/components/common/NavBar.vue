@@ -6,7 +6,7 @@
         <div v-if="isLoggedIn" class="relative">
         <button @click="toggleNotifications" class="p-2 text-gray-600 hover:text-blue-600 transition-colors">
           <IconBell class="w-6 h-6" />
-          <span v-if="unreadNotifications" class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+          <span v-if="unreadNotifications" class="absolute top-0 right-0 bg-red-500 shadow-md shadow-red-400 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
             {{ unreadNotifications }}
           </span>
         </button>
@@ -14,13 +14,16 @@
         </div>
         <div v-if="isLoggedIn" class="relative">
           <button @click="toggleUserMenu" class="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors">
-            <img :src="user.avatar || '/placeholder-avatar.png'" alt="User avatar" class="w-8 h-8 rounded-full object-cover">
+            <img :src="user.avatar || '/placeholder-avatar.png'" alt="User avatar" class="w-8 h-8 rounded-lg shadow-lg object-cover">
             <span class="font-medium">{{ user.name }}</span>
             <IconChevronDown class="w-3 h-3" />
           </button>
           <UserMenu v-if="showUserMenu" @close="showUserMenu = false" class="top-14" />
         </div>
-        <Button v-else @click="openAuthModal" variant="outline">Iniciar sesión</Button>
+        <div v-else class="flex items-center space-x-4">
+          <Button @click="openAuthModal" variant="default">Registrarse</Button>
+          <Button  @click="openAuthModal" variant="outline">Iniciar sesión</Button>
+        </div>
       </div>
     </div>
   </nav>
