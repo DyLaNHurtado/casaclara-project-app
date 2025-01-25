@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue';
-import HomeView from '@/views/HomeView.vue';
-import AdDetailsView from '@/views/AdDetailsView.vue';
-import FavoritesView from '@/views/FavoritesView.vue';
 import NotFound from '@/views/NotFound.vue';
 
 const routes = [
@@ -10,16 +7,18 @@ const routes = [
     path: '/',
     component: MainLayout,
     children: [
-      { path: '', name: 'home', component: HomeView },
-      { path: 'ad/:id', name: 'adDetails', component: AdDetailsView, props: true },
-      { path: 'favorites', name: 'favorites', component: FavoritesView },
-      // { path: 'contact', name: 'contact', component: ContactView },
-      // { path: 'about', name: 'about', component: AboutView },
-      // { path: 'profile', name: 'profile', component: ProfileView },
-      // { path: 'my-ads', name: 'my-ads', component: MyAdsView },
-      // { path: 'register', name: 'register', component: RegisterView },
-      // { path: 'login', name: 'login', component: LoginView },
-      // { path: 'advanced-search', name: 'advanced-search', component: AdvancedSearchView },
+      { path: '', name: 'home', component: () => import('@/views/HomeView.vue') },
+      { path: 'ad/:id', name: 'adDetails', component: () => import('@/views/AdDetailsView.vue'), props: true },
+      { path: 'favorites', name: 'favorites', component: () => import('@/views/FavoritesView.vue') },
+      { path: 'notifications', name: 'notifications', component: () => import('@/views/NotificationsView.vue') },
+/*       { path: 'settings', name: 'settings', component: () => import('@/views/SettingsView.vue') }, */
+/*       { path: 'contact', name: 'contact', component: () => import('@/views/ContactView.vue') },
+      { path: 'about', name: 'about', component: () => import('@/views/AboutView.vue') }, */
+/*       { path: 'profile', name: 'profile', component: () => import('@/views/ProfileView.vue') },
+      { path: 'my-ads', name: 'my-ads', component: () => import('@/views/MyAdsView.vue') },
+      { path: 'register', name: 'register', component: () => import('@/views/RegisterView.vue') },
+      { path: 'login', name: 'login', component: () => import('@/views/LoginView.vue') }, */
+/*       { path: 'advanced-search', name: 'advanced-search', component: () => import('@/views/AdvancedSearchView.vue') }, */
     ],
   },
   {
