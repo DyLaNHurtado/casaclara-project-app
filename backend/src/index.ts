@@ -1,7 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { configureMiddleware, errorHandler } from './middleware';
+import { configureMiddleware, errorHandler } from './middlewares';
 import anunciosRoutes from './routes/anuncios';
+import authRoutes from './routes/auth.routes';
 import { scrapingService } from './services/scrapingService';
 import logger from './utils/logger';
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 configureMiddleware(app);
 
 app.use('/api/anuncios', anunciosRoutes);
+app.use('/api/auth', authRoutes);
 
 app.use(errorHandler);
 

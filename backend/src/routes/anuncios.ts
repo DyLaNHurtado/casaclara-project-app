@@ -1,6 +1,6 @@
 import express from 'express';
 import { AnunciosController } from '../controllers/anunciosController';
-import { validateAnuncio } from '../middleware/validation';
+import { validateAnuncio } from '../middlewares/validation';
 import { ScrapingController } from '../controllers/scrapingController';
 
 const router = express.Router();
