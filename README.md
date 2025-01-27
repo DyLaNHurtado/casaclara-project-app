@@ -11,7 +11,7 @@ CasaClara es una aplicación web diseñada para ayudarte a filtrar anuncios de i
 Contará con una vista detallada para ver fotos adicionales, descripciones completas, y más.  
 
 ## Estado del proyecto
-El proyecto esta en fase inicial, estoy solo desarrollandolo por pasion en mis ratos libres. Es posible que todas las funcionalidades que se describen no esten todavia implementadas.
+El proyecto está en fase inicial, estoy solo desarrollándolo por pasión en mis ratos libres. Es posible que todas las funcionalidades que se describen no estén todavía implementadas.
 
 ## 🛠️ Plan de Tecnologías  
 ### Frontend  
@@ -38,42 +38,47 @@ El proyecto esta en fase inicial, estoy solo desarrollandolo por pasion en mis r
    ```bash
    git clone https://github.com/DyLaNHurtado/casaclara.git  
    cd casaclara  
+   ```
 
-    Instala las dependencias:
+2. Instala las dependencias:
 
-# Instalar frontend  
-cd frontend  
-npm install  
+   ```bash
+   # Instalar frontend  
+   cd frontend  
+   npm install  
 
-# Instalar backend  
-cd ../backend  
-npm install  
+   # Instalar backend  
+   cd ../backend  
+   npm install  
+   ```
 
-Configura las variables de entorno:
+3. Configura las variables de entorno:
 
-    .env (Backend): No son publicas, no todo el mundo tiene acceso a ellas.
-Ejecuta la aplicación:
+   .env : No son públicas, no todo el mundo tiene acceso a ellas.
 
-    # Inicia el backend  
-    cd casaclara-backend  
-    npm run dev  
+4. Ejecuta la aplicación:
 
-    # Inicia el frontend  
-    cd casaclara-frontend  
-    npm run dev  
+   ```bash
+   # Inicia el backend  
+   cd casaclara-backend  
+   npm run dev  
 
-    Abre el navegador en: http://localhost:3000.
+   # Inicia el frontend  
+   cd casaclara-frontend  
+   npm run dev  
+   ```
 
-🔍 Roadmap
+5. Abre el navegador en: http://localhost:3000.
 
-Ir siguendo el plan con las tecnologias descritas.
+## 🔍 Roadmap
 
-Agregar notificaciones automáticas para nuevos anuncios.
-Mejorar el sistema de scraping para adaptarse a múltiples sitios.
-
-    Integrar más opciones de exportación (CSV, PDF).
+- Seguir el plan con las tecnologías descritas.
+- Agregar notificaciones automáticas para nuevos anuncios.
+- Mejorar el sistema de scraping para adaptarse a múltiples sitios.
+- Integrar más opciones de exportación (CSV, PDF).
 
 ¡Esperamos que CasaClara sea tu compañero perfecto para encontrar inmuebles sin esfuerzo! 🌐
-🤝 Contribuciones
+
+## 🤝 Contribuciones
 
 ¡Las contribuciones son bienvenidas! Si tienes ideas o encuentras un error, abre un issue o crea un pull request.
