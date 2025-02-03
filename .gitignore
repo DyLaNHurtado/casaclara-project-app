@@ -104,5 +104,5 @@ supabase/.cache/
 .vercel/
 
 # Ignore package-lock.json in backend
-/backend/package-lock.json
-/frontend/package-lock.json
+backend/package-lock.json
+frontend/package-lock.json
