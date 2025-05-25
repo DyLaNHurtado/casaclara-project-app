@@ -29,16 +29,5 @@
     "JWT_SECRET": "your-secret-key",
     "SUPABASE_URL": "your-supabase-url",
     "SUPABASE_KEY": "your-supabase-key"
-  },
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    }
-  ]
+  }
 }
