@@ -1,4 +1,4 @@
-import type { Anuncio } from '@/types/anuncio';
+import type { Anuncio } from '../types/anuncio';
 import api from './api';
 
 export const getAllAds = async (params?: Record<string, any>) => {

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import type { Anuncio } from '@/types/anuncio';
-import { getAllAds, getAdById, postAd, postManyAds, putAd, deleteAd } from '@/services/anunciosService';
+import type { Anuncio } from '../types/anuncio';
+import { getAllAds, getAdById, postAd, postManyAds, putAd, deleteAd } from '../services/anunciosService';
 
 export const useAdStore = defineStore('adStore', () => {
   const ads = ref<Anuncio[]>([]);
